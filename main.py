@@ -3,6 +3,7 @@ import os
 import re
 import email
 
+
 class Grafo:
     def __init__(self):
         self.vertices = defaultdict(list)
@@ -144,6 +145,45 @@ def construir_grafo_emails(diretorio_base):
     return grafo
 
 
+def verificar_grafo_euleriano(grafo):
+    """
+    Verifica se o grafo direcionado é Euleriano.
+    Um grafo direcionado possui um ciclo Euleriano se:
+    - Todos os vértices com grau de entrada ou saída maior que 0 pertencem ao mesmo componente fortemente conexo (não verificado aqui)
+    - O grau de entrada é igual ao grau de saída para todos os vértices
+
+    Retorna:
+    - True se o grafo é Euleriano
+    - False se não for, mostrando os motivos
+    """
+
+
+    grau_saida = defaultdict(int)
+    grau_entrada = defaultdict(int)
+
+    # Calcula graus de entrada e saída
+    for u in grafo.vertices:
+        for v in grafo.vertices[u]:
+            grau_saida[u] += 1
+            grau_entrada[v] += 1
+
+    # Verifica se todos os vértices têm grau de entrada igual ao de saída
+    euleriano = True
+    for v in grafo.vertices:
+        entrada = grau_entrada.get(v, 0)
+        saida = grau_saida.get(v, 0)
+        if entrada != saida:
+            print(f"Vértice '{grafo.rotulos.get(v, v)}' viola a condição: grau de entrada = {entrada}, grau de saída = {saida}")
+            euleriano = False
+
+    if euleriano:
+        print("O grafo é Euleriano: todos os vértices têm grau de entrada igual ao grau de saída.")
+        return True
+    else:
+        print("O grafo NÃO é Euleriano: existem vértices com grau de entrada diferente do grau de saída.")
+        return False   
+
+
 def main():
     # Diretório base da amostra Enron
     diretorio_base = "Amostra Enron - 2016"
@@ -157,6 +197,9 @@ def main():
     
     print(f"Grafo construído com {grafo.ordem()} vértices e {grafo.tamanho()} arestas.")
     print(f"Lista de adjacências salva no arquivo '{arquivo_saida}'")
+
+    # verificando if grafo = euleriano (vai printar todos os vertices discrepantes)
+    verificar_grafo_euleriano(grafo)
 
 
 if __name__ == "__main__":
