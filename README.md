@@ -5,11 +5,13 @@ Para demonstrar a criação do grafo, a lista de adjacências é salva em um arq
 
 
 Métodos/funções para extrair as seguintes informações gerais do grafo construído:
+'''
   a. O número de vértices do grafo (ordem);
   b. O número de arestas do grafo (tamanho);
   c. O número de vértices isolados;
   d. Os 20 indivíduos que possuem maior grau de saída e os valores correspondentes (de maneira ordenada e decrescente de acordo com o grau);
   e. Os 20 indivíduos que possuem maior grau de entrada e os valores correspondentes (de maneira ordenada e decrescente de acordo com o grau).
+'''
 
 Função que verifica se o grafo é Euleriano (ou seja, que possui um ciclo Euleriano), retornando true ou false. 
 Caso a resposta seja false, a função informa ao usuário todas as condições que não foram satisfeitas.
