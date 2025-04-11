@@ -102,7 +102,7 @@ class Grafo:
                         f.write(f"  -> {u} ({rotulo_u}), peso: {peso}\n")
                 f.write("\n")
 
-    #4
+    #4 
     def alcance_limite(self, origem, limite):
         """
         Retorna os vértices que estão até uma distância limite a partir de origem,
@@ -139,6 +139,43 @@ class Grafo:
         #retorna vertices dentro do limite e excluit a origem
         return [(v, d) for v, d in dist.items() if v != origem] 
 
+#calculando diametro do grafo
+def diametro(self):
+    """
+    Calcula o diâmetro do grafo, ou seja, a maior menor distância entre quaisquer dois vértices
+    conectados, utilizando o algoritmo de Dijkstra a partir de cada vértice.
+
+    Retorna:
+    - O valor do diâmetro (maior distância mínima entre pares de vértices).
+    """
+    diametro = 0
+
+    for origem in self.vertices:
+        # distâncias a partir do vértice atual
+        dist = {origem: 0}
+        fila = [(0, origem)]
+
+        while fila:
+            atual_dist, atual = heapq.heappop(fila)
+
+            if atual_dist > dist.get(atual, float('inf')):
+                continue
+
+            for vizinho in self.vertices[atual]:
+                frequencia = self.pesos.get((atual, vizinho), 1)
+                peso = 10 / frequencia  # mesmo critério do alcance_limite
+
+                nova_dist = atual_dist + peso
+                if vizinho not in dist or nova_dist < dist[vizinho]:
+                    dist[vizinho] = nova_dist
+                    heapq.heappush(fila, (nova_dist, vizinho))
+
+        if dist:
+            maior_distancia = max(dist.values())
+            if maior_distancia > diametro:
+                diametro = maior_distancia
+
+    return diametro
 
 def processar_arquivo_email(caminho_arquivo, grafo):
     """
@@ -311,6 +348,9 @@ def main():
     for email, distancia in sorted(alcance, key=lambda x: x[1])[:40]: #mostra os 40 primeiros (mudavel)
         print(f"{email} - Distância: {distancia}")
 
+    #5 diametro do grafo
+    diam = grafo.diametro()
+    print(f"Diâmetro do grafo (maior distância mínima entre dois vértices): {diam:.2f}")
 
 
 if __name__ == "__main__":
