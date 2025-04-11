@@ -15,6 +15,50 @@ class Grafo:
     
     def tamanho(self):
         return sum(len(vizinhos) for vizinhos in self.vertices.values())
+    
+    #um vertice é isolado se não tiver nenhuma saida e não tiver nenhuma entrada
+    def vertice_isolado(self):
+        isolados = 0
+        destino = {v for _, v in self.pesos.keys()}
+
+        for v in self.vertices:
+            tem_saida = len(self.vertices[v]) > 0
+            tem_entrada = v in destino
+            if not tem_saida and not tem_entrada:
+                isolados += 1
+        return isolados
+    
+    def maiores_graus_saida(self):
+        """
+        Retorna os 20 indivíduos que possuem maior grau de saída e os valores
+        correspondentes (de maneira ordenada e decrescente de acordo com o grau)
+
+        Saída:
+        - Lista de tuplas (vértice, grau de saída), ordenada.
+        """
+        # aqui vai calcular o grau de saida de cada vertice
+        maiores_graus = [(v, len(self.vertices[v])) for v in self.vertices]
+
+        #  ordena decrescentemente de acordp com grau saida
+        maiores_graus.sort(key=lambda x: x[1], reverse=True)
+
+         # retorna os 20 primeiros :))
+        return maiores_graus[:20]
+    
+    def maiores_graus_entrada(self):
+        """
+        Os 20 indivíduos que possuem maior grau de entrada e os valores
+        correspondentes (de maneira ordenada e decrescente de acordo com o grau).
+
+        Saída:
+        - Lista de tuplas (vértice, grau de entrada), ordenada.
+        """
+        # utiliza defaultdict para contar o grau de entrada
+        entradas = defaultdict(int)
+        for u, v in self.pesos:
+            entradas[v] += 1
+        maiores_graus = sorted(entradas.items(), key=lambda x: x[1], reverse=True)# tranforma em uma lista de tuplas 
+        return maiores_graus[:20] #retorna os 20 primeiros :))
         
     def adicionar_vertice(self, v, rotulo=None):
         # Adiciona um vértice ao grafo com um rótulo opcional
@@ -198,8 +242,27 @@ def main():
     print(f"Grafo construído com {grafo.ordem()} vértices e {grafo.tamanho()} arestas.")
     print(f"Lista de adjacências salva no arquivo '{arquivo_saida}'")
 
+    #vertices isolados 
+    print(f"Vértices isolados: {grafo.vertice_isolado()}")
+
+    # 20 maiores graus de saida de forma descrescente 
+    print("\nPrimeiros 20 indivíduos com maior grau de saída (número de destinatários distintos):")
+    maiores_graus_saida = grafo.maiores_graus_saida()
+    for i, (email, grau) in enumerate(maiores_graus_saida, start=1):
+        rotulo = grafo.rotulos.get(email, email)
+        print(f"{i}. {rotulo} - Grau de saída: {grau}")
+
+    # 20 maiores graus de entrada de forma descrescente
+    """
+    print("\nPrimeiros 20 indivíduos com maior grau de entrada (número de remetentes distintos):")
+    maiores_graus = grafo.maiores_graus_entrada()
+    for i, (email, grau) in enumerate(maiores_graus, start=1):
+        rotulo = grafo.rotulos.get(email, email)
+        print(f"{i}. {rotulo} - Grau de entrada: {grau}")
+    """
+
     # verificando if grafo = euleriano (vai printar todos os vertices discrepantes)
-    verificar_grafo_euleriano(grafo)
+    #verificar_grafo_euleriano(grafo)
 
 
 if __name__ == "__main__":
