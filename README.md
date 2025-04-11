@@ -5,6 +5,7 @@ Para demonstrar a criação do grafo, a lista de adjacências é salva em um arq
 
 
 Métodos/funções para extrair as seguintes informações gerais do grafo construído:
+
 '''
   a. O número de vértices do grafo (ordem);
   b. O número de arestas do grafo (tamanho);
